@@ -1,19 +1,29 @@
+import sys, os
+import argparse
 import numpy as np
-import sys
+
 from utils import create_str2image, preprocess, num2braille
 
+# 使うフォント
+FONT_PATH = "./fonts/ipag.ttf"
 
-WIDTH_SIZE = 20
-IMAGE_URL = "./imgs/image.png"
-REVERSAL = False
 
 if __name__ == "__main__":
 
-    # 文字を利用する場合
-    # create_str2image("./fonts/ipag.ttf", 32, "イ")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input", default="./imgs/sample.png", type=str)
+    parser.add_argument("--col", default=32, type=int)
+    parser.add_argument("--rev", action="store_true")
+    args = parser.parse_args()
 
 
-    img = preprocess(IMAGE_URL, WIDTH_SIZE, REVERSAL)
+    # 画像があるなら画像で生成，無ければ文字から画像をつくる
+    if not os.path.isfile(args.input):
+        path = create_str2image(FONT_PATH, 32, args.input)
+        img = preprocess(path, args.col, args.rev)
+    else:
+        img = preprocess(args.input, args.col, args.rev)
+
 
     braille_list = []
     for i in range(int(np.shape(img)[0]/4)):

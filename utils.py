@@ -10,19 +10,23 @@ def create_str2image(fontname, fontsize, text):
         fontsize: フォントの大きさ
         text    : 文字
     Return:
-        なし
+        作った画像のPath
     '''
+    SAVE_IMAGE = "./imgs/temp.png"
+
     font = ImageFont.truetype(fontname, fontsize)
 
-    tmp = Image.new('RGB', (1, 1), (255, 255, 255))
+    tmp = Image.new('L', (1, 1), 255)
     tmp_d = ImageDraw.Draw(tmp)
     textsize = tmp_d.textsize(text, font)
 
-    img = Image.new('RGB', textsize, (255, 255, 255))
+    img = Image.new('L', textsize, 255)
     draw = ImageDraw.Draw(img)
     font_color="black"
     draw.text((0,0), text, fill=font_color, font=font)
-    img.save("./imgs/image.png")
+    img.save(SAVE_IMAGE)
+
+    return SAVE_IMAGE
 
 
 def num2braille(n):
